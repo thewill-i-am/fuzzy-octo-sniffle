@@ -106,7 +106,21 @@ h1 em, h2 em { color: var(--coral); font-weight: normal; }
 .noscript-note { text-align: center; padding: 20px; font-size: 14px; }
 
 /* La carta usa un diálogo nativo: teclado, Escape y foco incluidos. */
-html:has(.letter-dialog[open]) { overflow: hidden; }
+html:has(dialog[open]) { overflow: hidden; }
+.password-dialog { width: min(430px, calc(100% - 32px)); max-height: calc(100svh - 32px); padding: 0; border: 1px solid #ecdfc7; border-radius: 9px; background: var(--paper); color: var(--ink); box-shadow: 0 30px 100px #173f3b45; overflow-y: auto; }
+.password-dialog::backdrop { background: #26483f9c; backdrop-filter: blur(9px); }
+.password-paper { padding: 39px 40px 32px; }
+.password-shell { color: var(--coral); margin-bottom: 25px; }
+.password-paper .eyebrow { justify-content: flex-start; font-size: 6px; letter-spacing: 1.2px; }
+.password-paper h2 { font-size: clamp(35px, 9vw, 48px); margin: 20px 0; }
+.password-hint { font: italic 17px/1.7 var(--serif); color: #65715d; margin: 0 0 25px; }
+.password-paper label { display: block; margin-bottom: 8px; font-size: 10px; letter-spacing: .5px; }
+.password-paper input { display: block; width: 100%; min-width: 0; padding: 13px 14px; border: 1px solid #b4bca6; border-radius: 4px; background: #fffdf7; color: var(--ink); font: 17px var(--sans); }
+.password-paper input:focus-visible { outline: 2px solid #3c796d; outline-offset: 3px; }
+.password-paper input[aria-invalid="true"] { border-color: #b64a47; }
+.password-error { min-height: 18px; font-size: 11px; line-height: 1.6; color: #a33e3b; margin: 10px 0 0; }
+.password-paper .open-button { width: 100%; justify-content: center; margin-top: 9px; }
+.password-note { margin: 17px 0 0; color: #788376; font-size: 9px; text-align: center; line-height: 1.8; }
 .letter-dialog { width: min(660px, calc(100% - 32px)); max-height: calc(100svh - 48px); padding: 0; border: 1px solid #ecdfc7; border-radius: 9px; background: #fbf6e9; color: var(--ink); box-shadow: 0 30px 100px #173f3b45; overflow-y: auto; overscroll-behavior: contain; }
 .letter-dialog[open] { animation: letter-arrives .7s cubic-bezier(.2, .75, .25, 1) both; }
 .letter-dialog::backdrop { background: #26483f8c; backdrop-filter: blur(9px); animation: backdrop-arrives .5s ease both; }

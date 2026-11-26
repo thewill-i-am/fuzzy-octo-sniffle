@@ -3,6 +3,17 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const crypto = require("node:crypto");
+
+// Clave y carta de prueba: nunca se publica la contraseña real.
+const password = crypto.randomBytes(24).toString("base64");
+const sample = { destinataria: "Jenny", saludo: "Hola,", parrafos: ["Una carta de prueba.", "<script>no se ejecuta</script>"], despedida: "Con cariño,", firma: "De Will" };
+const salt = crypto.randomBytes(16);
+const iv = crypto.randomBytes(12);
+const key = crypto.pbkdf2Sync(password, salt, 600000, 32, "sha256");
+const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+const data = Buffer.concat([cipher.update(JSON.stringify(sample), "utf8"), cipher.final(), cipher.getAuthTag()]);
+const fixture = { version: 1, salt: salt.toString("base64"), iv: iv.toString("base64"), data: data.toString("base64") };
 
 // Un DOM mínimo permite comprobar la interacción sin instalar dependencias.
 function createApp(reduced = false) {
@@ -11,7 +22,7 @@ function createApp(reduced = false) {
     const attributes = new Map();
     const classes = new Set();
     return {
-      textContent: "", children: [], disabled: false, open: false, scrollTop: 0,
+      textContent: "", value: "", children: [], disabled: false, open: false, scrollTop: 0,
       classList: { add: (name) => classes.add(name), remove: (name) => classes.delete(name), contains: (name) => classes.has(name) },
       style: { setProperty: (name, value) => attributes.set(name, value) },
       getBoundingClientRect: () => ({ x: 700, y: 200, width: 100, height: 120 }),
@@ -24,10 +35,11 @@ function createApp(reduced = false) {
       removeAttribute: (name) => attributes.delete(name),
       getAttribute: (name) => attributes.get(name),
       addEventListener(name, listener) { (listeners[name] ??= []).push(listener); },
-      dispatch(name) { (listeners[name] ?? []).forEach((listener) => listener({ currentTarget: this })); },
+      dispatch(name) { return Promise.all((listeners[name] ?? []).map((listener) => listener({ currentTarget: this, preventDefault() {} }))); },
       showModal() { this.open = true; },
       close() { this.open = false; this.dispatch("close"); },
-      focus() { this.focused = true; }
+      focus() { this.focused = true; },
+      select() {}
     };
   }
   const elements = new Map();
@@ -42,12 +54,14 @@ function createApp(reduced = false) {
   let nextTimer = 0;
   let delay;
   const context = {
+    Uint8Array, TextEncoder, TextDecoder, atob,
     document: {
       querySelector: get,
       querySelectorAll: (selector) => selector === "[data-open-letter]" ? buttons : recipients,
       createElement: element
     },
     window: {
+      crypto: crypto.webcrypto,
       innerWidth: 1200, innerHeight: 800,
       matchMedia: () => ({ matches: reduced }),
       setTimeout(callback, milliseconds) { delay = milliseconds; timers.set(++nextTimer, callback); return nextTimer; },
@@ -57,23 +71,64 @@ function createApp(reduced = false) {
   vm.createContext(context);
   for (const file of ["carta.js", "app.js"]) {
     vm.runInContext(fs.readFileSync(path.join(__dirname, "..", file), "utf8"), context);
-    if (file === "carta.js") context.window.CARTA.parrafos.push("<script>no se ejecuta</script>");
+    if (file === "carta.js") context.window.CARTA_CIFRADA = { ...fixture };
   }
-  return { get, buttons, recipients, context, timers, delay: () => delay, tick() { for (const callback of [...timers.values()]) callback(); timers.clear(); } };
+  return {
+    get, buttons, recipients, context, timers, delay: () => delay,
+    async unlock(value = password) { get("#letter-password").value = value; await get("#password-form").dispatch("submit"); },
+    tick() { for (const callback of [...timers.values()]) callback(); timers.clear(); }
+  };
 }
 
-test("la carta se renderiza como texto y personaliza el nombre", () => {
+test("sin contraseña no se renderiza la carta ni se puede saltar el acceso", () => {
   const app = createApp();
+  assert.equal(app.get("#password-dialog").open, true);
+  assert.equal(app.get("#letter-paragraphs").children.length, 0);
+  app.get("#close-password").dispatch("click");
+  app.buttons[0].dispatch("click");
+  assert.equal(app.get("#password-dialog").open, true);
+  assert.equal(app.timers.size, 0);
+  assert.equal(app.get("#letter-dialog").open, false);
+});
+
+test("una contraseña incorrecta no revela el contenido; la correcta permite continuar", async () => {
+  const app = createApp();
+  await app.unlock(`${password}x`);
+  assert.equal(app.get("#password-dialog").open, true);
+  assert.equal(app.get("#letter-paragraphs").children.length, 0);
+  assert.equal(app.get("#letter-password").getAttribute("aria-invalid"), "true");
+  assert.match(app.get("#password-error").textContent, /no coincide/);
+  assert.equal(app.get("#unlock-button").disabled, false);
+  await app.unlock();
+  assert.equal(app.get("#password-dialog").open, false);
+  assert.equal(app.get("#letter-password").value, "");
+  assert.equal(app.get("#letter-password").getAttribute("aria-invalid"), undefined);
+});
+
+test("un archivo cifrado alterado no se puede abrir", async () => {
+  const app = createApp();
+  const damaged = Buffer.from(fixture.data, "base64");
+  damaged[0] ^= 1;
+  app.context.window.CARTA_CIFRADA.data = damaged.toString("base64");
+  await app.unlock();
+  assert.equal(app.get("#letter-paragraphs").children.length, 0);
+  assert.equal(app.get("#password-dialog").open, true);
+});
+
+test("después de descifrar, la carta se renderiza como texto y personaliza el nombre", async () => {
+  const app = createApp();
+  await app.unlock();
   assert.equal(app.recipients[0].textContent, "Jenny");
   assert.equal(app.recipients[1].textContent, "Jenny.");
   const paragraphs = app.get("#letter-paragraphs").children;
-  assert.equal(paragraphs.length, app.context.window.CARTA.parrafos.length);
+  assert.equal(paragraphs.length, sample.parrafos.length);
   assert.equal(paragraphs.at(-1).textContent, "<script>no se ejecuta</script>");
   assert.match(app.get(".carnation-button").getAttribute("aria-label"), /clavel.*Jenny/);
 });
 
-test("florece una sola vez, abre la carta desde el clavel y permite repetir", () => {
+test("florece una sola vez, abre la carta desde el clavel y permite repetir", async () => {
   const app = createApp();
+  await app.unlock();
   app.buttons[0].dispatch("click");
   app.buttons[1].dispatch("click");
   assert.equal(app.timers.size, 1);
@@ -97,8 +152,9 @@ test("florece una sola vez, abre la carta desde el clavel y permite repetir", ()
   assert.equal(app.buttons[1].focused, true);
 });
 
-test("con movimiento reducido abre sin esperar la floración", () => {
+test("con movimiento reducido abre sin esperar la floración", async () => {
   const app = createApp(true);
+  await app.unlock();
   app.buttons[0].dispatch("click");
   assert.equal(app.delay(), 0);
   app.tick();
@@ -113,4 +169,16 @@ test("la imagen adjunta está incluida como un recurso local dentro de la carta"
   assert.match(html, /alt="Bob Esponja con unas esposas enormes alrededor de sus brazos\."/);
   const image = fs.readFileSync(path.join(__dirname, "..", "assets", "bob-esponja-esposas.jpg"));
   assert.equal(image.readUInt16BE(0), 0xffd8);
+});
+
+test("el archivo publicado contiene solo el texto cifrado, no la carta original", () => {
+  const source = fs.readFileSync(path.join(__dirname, "..", "carta.js"), "utf8");
+  const context = { window: {} };
+  vm.runInNewContext(source, context);
+  assert.equal(context.window.CARTA, undefined);
+  assert.equal(context.window.CARTA_CIFRADA.version, 1);
+  assert.equal(Buffer.from(context.window.CARTA_CIFRADA.salt, "base64").length, 16);
+  assert.equal(Buffer.from(context.window.CARTA_CIFRADA.iv, "base64").length, 12);
+  assert.ok(Buffer.from(context.window.CARTA_CIFRADA.data, "base64").length > 16);
+  assert.equal(source.includes('"parrafos"'), false);
 });

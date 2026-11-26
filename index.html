@@ -7,9 +7,9 @@
     <meta name="description" content="Un clavel que abre sus pétalos y guarda una carta muy especial para Jenny." />
     <title>Una cartita para Jenny ♡</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23e8f3ed'/%3E%3Cpath d='M32 50 10 29C-3 12 23 3 32 20 41 3 67 12 54 29Z' fill='%23df715e'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="carta.js" defer></script>
-    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=2" />
+    <script src="carta.js?v=2" defer></script>
+    <script src="app.js?v=2" defer></script>
   </head>
   <body>
     <!-- Ilustraciones propias: no necesitan imágenes ni servicios externos. -->
@@ -205,8 +205,23 @@
       <div class="bottom-rule"><span></span><svg width="22" height="22" aria-hidden="true"><use href="#sparkle" /></svg><span></span></div>
       <footer class="site-footer"><span>Un pequeño detalle. Un cariño inmenso.</span><span>De Fondo de Bikini a tu corazón <span class="footer-heart">♡</span></span></footer>
       <p class="sr-only" id="opening-status" role="status"></p>
-      <noscript><p class="noscript-note">Activa JavaScript para abrir la sorpresa. También puedes leer el texto de la carta en el archivo <code>carta.js</code>.</p></noscript>
+      <noscript><p class="noscript-note">Activa JavaScript para introducir el safe word y abrir tu carta.</p></noscript>
     </main>
+
+    <dialog class="password-dialog" id="password-dialog" aria-labelledby="password-title">
+      <button class="close-letter" type="button" id="close-password" aria-label="Volver al clavel">×</button>
+      <form id="password-form" class="password-paper">
+        <svg class="password-shell" width="40" height="36" aria-hidden="true"><use href="#shell" /></svg>
+        <p class="eyebrow">ANTES DE HACER FLORECER ESTE CLAVEL</p>
+        <h2 id="password-title">Un secreto<br /><em>entre nosotros.</em></h2>
+        <p class="password-hint" id="password-hint">La contraseña es el safe word.</p>
+        <label for="letter-password">Contraseña</label>
+        <input id="letter-password" name="password" type="password" required maxlength="128" autocomplete="current-password" autocapitalize="none" spellcheck="false" aria-describedby="password-hint password-error" autofocus />
+        <p id="password-error" class="password-error" role="alert"></p>
+        <button class="open-button" id="unlock-button" type="submit">Entrar a mi carta</button>
+        <p class="password-note">Una palabra nuestra. Un clavel solo para vos.</p>
+      </form>
+    </dialog>
 
     <dialog class="letter-dialog" id="letter-dialog" aria-labelledby="letter-title">
       <button class="close-letter" type="button" id="close-letter" aria-label="Cerrar la carta">×</button>
