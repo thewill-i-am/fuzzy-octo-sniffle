@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e8f3ed" />
+    <meta name="description" content="Un clavel que abre sus pétalos y guarda una carta muy especial para Jenny." />
+    <title>Una cartita para Jenny ♡</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23e8f3ed'/%3E%3Cpath d='M32 50 10 29C-3 12 23 3 32 20 41 3 67 12 54 29Z' fill='%23df715e'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="carta.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <!-- Ilustraciones propias: no necesitan imágenes ni servicios externos. -->
+    <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="carnation-pink" x1="0" y1="0" x2=".3" y2="1">
+          <stop stop-color="#ffd6ca" /><stop offset=".35" stop-color="#f2a0ab" /><stop offset=".75" stop-color="#d66888" /><stop offset="1" stop-color="#a33c60" />
+        </linearGradient>
+        <linearGradient id="carnation-deep" x1="0" y1="0" x2=".2" y2="1">
+          <stop stop-color="#f4b2b7" /><stop offset=".5" stop-color="#d46b88" /><stop offset="1" stop-color="#953654" />
+        </linearGradient>
+        <linearGradient id="carnation-light" x1="0" y1="0" x2=".4" y2="1">
+          <stop stop-color="#ffe4d6" /><stop offset=".45" stop-color="#f8b5b8" /><stop offset="1" stop-color="#c76181" />
+        </linearGradient>
+        <linearGradient id="calyx-green" x1="0" y1="0" x2="1" y2="0">
+          <stop stop-color="#416e59" /><stop offset=".5" stop-color="#8caa7b" /><stop offset="1" stop-color="#50775c" />
+        </linearGradient>
+        <linearGradient id="sponge-color" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#ffe775" /><stop offset="1" stop-color="#f5cb50" />
+        </linearGradient>
+        <filter id="petal-depth" x="-25%" y="-25%" width="150%" height="150%">
+          <feDropShadow dx="1" dy="2" stdDeviation="1.4" flood-color="#8d3a58" flood-opacity=".22" />
+        </filter>
+        <symbol id="sea-flower" viewBox="0 0 120 120">
+          <path d="M60 45C24-5 4 34 36 55 0 81 25 112 52 78 66 123 101 107 82 72 125 72 119 34 82 44 91 1 50-2 60 45Z" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="62" cy="60" r="9" fill="none" stroke="currentColor" stroke-width="2" />
+        </symbol>
+        <symbol id="sparkle" viewBox="0 0 32 32">
+          <path d="M16 1C17 12 20 15 31 16 20 17 17 20 16 31 15 20 12 17 1 16 12 15 15 12 16 1Z" fill="currentColor" />
+        </symbol>
+        <symbol id="shell" viewBox="0 0 40 36">
+          <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <path d="M17 30C6 26 1 17 5 12c2-2 4-2 6-1-2-8 5-11 9-6 4-5 11-2 9 6 8-4 13 5 5 12l-11 7Z" />
+            <path d="m10 13 9 16M20 7v22m10-16-9 16M16 32h8" />
+          </g>
+        </symbol>
+        <g id="ruffled-petal">
+          <path d="M0 22C-15 8-45-13-49-41Q-65-48-54-61Q-69-65-57-76Q-69-83-57-91Q-67-102-55-103Q-60-115-48-110Q-51-125-40-117Q-36-131-29-121Q-22-137-16-124Q-8-136-4-124Q3-139 9-125Q17-136 21-123Q31-133 34-119Q47-128 46-113Q59-118 54-105Q68-107 59-95Q72-89 60-81Q72-72 58-66Q68-51 49-40C45-13 14 9 0 22Z" stroke="#fcd6cd" stroke-width=".7" stroke-linejoin="round" />
+          <path d="M-53-91q10 8 7-6 13 10 12-6 10 11 12-5 11 9 13-4 9 11 13-1 8 12 12-1 7 13 14 3 3 13 13 3-2 14 11 7" fill="none" stroke="#ffe5da" stroke-width="1.8" opacity=".7" />
+          <path d="M-4 10C-35-20-12-69-34-105M1 2C-5-45 25-68 15-113M10 10C30-13 55-48 47-84M-17-16C-46-47-25-71-48-87" fill="none" stroke="#a53b64" stroke-width="1.6" opacity=".27" />
+          <path d="M-8-2C-20-32-2-64-12-103M7-18C17-43 36-59 30-91M-38-49Q-49-62-48-73" fill="none" stroke="#ffe7db" stroke-width="2.2" opacity=".35" />
+        </g>
+        <symbol id="carnation" viewBox="0 0 160 260">
+          <path d="M81 250C98 182 69 138 81 75" fill="none" stroke="#66866a" stroke-width="3" stroke-linecap="round" />
+          <path d="M85 176Q54 162 38 125q35 22 47 51Zm1 23q26-28 41-65-33 29-41 65Z" fill="#829c7b" />
+          <g transform="translate(80 76)" fill="url(#carnation-deep)">
+            <use href="#ruffled-petal" transform="rotate(0) scale(.46)" /><use href="#ruffled-petal" transform="rotate(45) scale(.44)" /><use href="#ruffled-petal" transform="rotate(90) scale(.46)" /><use href="#ruffled-petal" transform="rotate(135) scale(.44)" /><use href="#ruffled-petal" transform="rotate(180) scale(.46)" /><use href="#ruffled-petal" transform="rotate(225) scale(.44)" /><use href="#ruffled-petal" transform="rotate(270) scale(.46)" /><use href="#ruffled-petal" transform="rotate(315) scale(.44)" />
+          </g>
+          <g transform="translate(80 76)" fill="url(#carnation-light)">
+            <use href="#ruffled-petal" transform="rotate(20) scale(.32)" /><use href="#ruffled-petal" transform="rotate(80) scale(.34)" /><use href="#ruffled-petal" transform="rotate(140) scale(.32)" /><use href="#ruffled-petal" transform="rotate(200) scale(.34)" /><use href="#ruffled-petal" transform="rotate(260) scale(.32)" /><use href="#ruffled-petal" transform="rotate(320) scale(.34)" />
+          </g>
+        </symbol>
+        <symbol id="bob" viewBox="0 0 190 260">
+          <g stroke="#69532e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M34 133 16 163l-6-8m7 7-8 5m8-5-1 11m139-45 13 31 10-7m-10 7 12 2m-12-2 5 10" fill="none" />
+            <path d="m59 204-2 30m72-30 3 30" stroke-width="9" stroke="#f5d264" />
+            <path d="m57 221-1 16m76-16 1 16" stroke="#faf8ee" stroke-width="10" />
+            <path d="m52 224 10 1m65-1 10-1" stroke="#d36c61" stroke-width="2" />
+            <path d="M56 235c-27-8-38 12-13 14h22v-11Zm77 0c27-8 38 12 13 14h-22v-11Z" fill="#424541" stroke="#424541" />
+            <path d="M29 38Q23 25 37 22l22 2 19-5 23 4 24-2 27 5q13-3 11 13l-4 26 3 24-4 27 3 33-17 14-99-2-20-16 5-28-3-29 5-24Z" fill="url(#sponge-color)" />
+            <g fill="#d1ab3f" stroke="none" opacity=".65">
+              <ellipse cx="43" cy="42" rx="7" ry="9" /><ellipse cx="144" cy="47" rx="6" ry="8" /><ellipse cx="40" cy="113" rx="6" ry="8" /><ellipse cx="146" cy="128" rx="7" ry="5" /><ellipse cx="75" cy="35" rx="4" ry="3" /><ellipse cx="113" cy="141" rx="5" ry="3" /><ellipse cx="52" cy="140" rx="4" ry="3" />
+            </g>
+            <path d="m57 52-4-10m16 7V37m10 15 4-11m30 10-3-12m14 12 2-12m7 16 7-9" fill="none" />
+            <ellipse cx="68" cy="73" rx="25" ry="28" fill="#fffdf6" /><ellipse cx="116" cy="73" rx="25" ry="28" fill="#fffdf6" />
+            <ellipse cx="76" cy="76" rx="11" ry="14" fill="#7dbbc4" /><ellipse cx="108" cy="76" rx="11" ry="14" fill="#7dbbc4" />
+            <ellipse cx="78" cy="77" rx="5" ry="8" fill="#343f3c" stroke="none" /><ellipse cx="106" cy="77" rx="5" ry="8" fill="#343f3c" stroke="none" />
+            <circle cx="79" cy="72" r="2.5" fill="white" stroke="none" /><circle cx="107" cy="72" r="2.5" fill="white" stroke="none" />
+            <path d="M88 83c0-10 14-9 14 2v19c-7 9-17 0-14-5Z" fill="#f7d661" />
+            <ellipse cx="48" cy="105" rx="12" ry="8" fill="#ec9b7d" stroke="none" /><ellipse cx="136" cy="105" rx="12" ry="8" fill="#ec9b7d" stroke="none" />
+            <path d="M48 107q44 41 89-1" fill="#a76643" /><path d="M81 117v13h13v-11m2 0v11h13v-15" fill="#fffdf6" />
+            <path d="m30 150 129 1-1 18H30Z" fill="#fffdf6" /><path d="m34 170 121-1-3 36H36Z" fill="#ab7c55" />
+            <path d="m75 153 16 9 16-9m-16 9-7 23 10 9 8-11-11-21" fill="#cf6a57" /><path d="M44 180h25m45 0h26" fill="none" stroke-width="4" />
+          </g>
+        </symbol>
+        <symbol id="patrick" viewBox="0 0 170 210">
+          <g stroke="#95635c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M52 181c-6 34-27 31-21-3m91 3c7 32 25 31 22-2" fill="#eeb09c" />
+            <path d="M42 102C58 80 60 12 79 8c16-2 24 63 39 88 8 10 42 5 44 18 0 12-30 20-36 26l6 41c-34 21-66 19-97-2l6-37C23 128 4 126 7 115c4-14 25-7 35-13Z" fill="#eeb09c" />
+            <path d="M39 147q46 17 89 0l5 33q-46 31-99-1Z" fill="#b5bf7a" />
+            <path d="m49 152 7 12-9 9 16-1 6 14 5-15 14-5-15-6 1-7m36 8-12 9 9 13 3-12 15 1" fill="#ad86a5" stroke="none" />
+            <ellipse cx="72" cy="86" rx="10" ry="17" fill="#fffaf1" /><ellipse cx="92" cy="86" rx="10" ry="17" fill="#fffaf1" />
+            <ellipse cx="75" cy="89" rx="3" ry="5" fill="#504b42" stroke="none" /><ellipse cx="89" cy="89" rx="3" ry="5" fill="#504b42" stroke="none" />
+            <path d="m63 63 11-3m15 0 10 4M66 113q19 14 34-3" fill="none" /><path d="M82 139h1" stroke-width="4" />
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="ocean-decor" aria-hidden="true">
+      <svg class="sea-flower flower-one"><use href="#sea-flower" /></svg>
+      <svg class="sea-flower flower-two"><use href="#sea-flower" /></svg>
+      <svg class="sea-flower flower-three"><use href="#sea-flower" /></svg>
+      <span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span>
+    </div>
+
+    <header class="site-header">
+      <a class="wordmark" href="index.html" aria-label="Una cartita para Jenny, inicio">
+        <svg width="33" height="33" aria-hidden="true"><use href="#shell" /></svg>
+        una cartita <span>para ti.</span>
+      </a>
+      <span class="header-note"><span></span> ENTRE OLAS Y CARIÑO</span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="little-line"></span> CORREO DESDE FONDO DE BIKINI</p>
+          <h1 id="hero-title"><span data-recipient>Jenny</span>,<br />un clavel guarda<br /><em>algo para ti.</em></h1>
+          <p class="hero-description">Tu flor favorita tiene algo que contarte.<br class="desktop-break" /> Entre sus pétalos, dejé un pedacito de mi corazón.</p>
+          <button class="open-button" type="button" data-open-letter>
+            <svg width="19" height="19" aria-hidden="true"><use href="#sparkle" /></svg>
+            <span>Abrir mi clavel</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+          <p class="tiny-note">Sin prisa. Las cosas bonitas merecen su momento.</p>
+          <div class="delivery-note"><span class="delivery-heart" aria-hidden="true">♡</span><span>Hecha con mucho cariño.<br /><strong>Entregada con ayuda de dos buenos amigos.</strong></span></div>
+        </div>
+
+        <div class="scene" id="scene">
+          <div class="ocean-portal" aria-hidden="true"><span class="portal-ring"></span></div>
+          <span class="scene-caption" aria-hidden="true">tu flor favorita. un secreto entre pétalos.</span>
+          <svg class="scene-sparkle sparkle-one" aria-hidden="true"><use href="#sparkle" /></svg>
+          <svg class="scene-sparkle sparkle-two" aria-hidden="true"><use href="#sparkle" /></svg>
+          <svg class="scene-shell" aria-hidden="true"><use href="#shell" /></svg>
+
+          <button class="carnation-button" type="button" data-open-letter aria-label="Hacer florecer el clavel y leer la carta para Jenny">
+            <svg class="carnation-illustration" viewBox="0 0 520 520" aria-hidden="true">
+              <ellipse class="flower-halo" cx="260" cy="200" rx="166" ry="166" />
+              <path d="M259 220C249 288 285 354 254 476" fill="none" stroke="#64846b" stroke-width="5" stroke-linecap="round" />
+              <path d="M264 330C222 321 202 278 180 264c49 13 68 40 84 66Z" fill="#789576" />
+              <path d="M265 344c39-29 57-67 80-85-45 17-66 50-80 85Z" fill="#91a887" />
+              <path d="M264 399c-33-12-45-37-62-55 35 13 50 30 62 55Zm-1 14c27-17 44-42 51-61-31 17-44 39-51 61Z" fill="#698d73" />
+              <path d="m195 277 68 53m2 14 66-68" fill="none" stroke="#a1b497" stroke-width="1.3" />
+              <g transform="translate(260 200)">
+                <g class="petal-ring petal-ring-outer">
+                  <g class="carnation-petal" style="--angle:0deg;--fold:-12deg;--size:1;--delay:.05s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:28deg;--fold:9deg;--size:.92;--delay:.12s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:62deg;--fold:-8deg;--size:1.07;--delay:.2s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:88deg;--fold:14deg;--size:.95;--delay:.27s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:120deg;--fold:-15deg;--size:1.02;--delay:.35s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:153deg;--fold:6deg;--size:.93;--delay:.4s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-178deg;--fold:-5deg;--size:1.05;--delay:.32s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-151deg;--fold:12deg;--size:.91;--delay:.25s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-117deg;--fold:-10deg;--size:1.06;--delay:.18s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-92deg;--fold:8deg;--size:.96;--delay:.1s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-58deg;--fold:-14deg;--size:1.02;--delay:.23s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-31deg;--fold:4deg;--size:.97;--delay:.3s"><use href="#ruffled-petal" /></g>
+                </g>
+                <g class="petal-ring petal-ring-middle">
+                  <g class="carnation-petal" style="--angle:15deg;--fold:10deg;--size:.83;--delay:.45s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:45deg;--fold:-9deg;--size:.87;--delay:.52s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:75deg;--fold:13deg;--size:.82;--delay:.6s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:105deg;--fold:-11deg;--size:.86;--delay:.67s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:135deg;--fold:5deg;--size:.83;--delay:.75s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:165deg;--fold:-7deg;--size:.88;--delay:.8s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-165deg;--fold:12deg;--size:.84;--delay:.72s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-135deg;--fold:-12deg;--size:.87;--delay:.65s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-105deg;--fold:8deg;--size:.83;--delay:.58s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-75deg;--fold:-5deg;--size:.86;--delay:.5s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-45deg;--fold:6deg;--size:.84;--delay:.62s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-15deg;--fold:-8deg;--size:.87;--delay:.7s"><use href="#ruffled-petal" /></g>
+                </g>
+                <g class="petal-ring petal-ring-inner">
+                  <g class="carnation-petal" style="--angle:5deg;--fold:-6deg;--size:.61;--delay:.85s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:50deg;--fold:8deg;--size:.65;--delay:.92s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:95deg;--fold:-8deg;--size:.62;--delay:1s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:140deg;--fold:5deg;--size:.64;--delay:1.07s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-175deg;--fold:-5deg;--size:.61;--delay:1.1s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-130deg;--fold:9deg;--size:.65;--delay:1.02s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-85deg;--fold:-9deg;--size:.62;--delay:.95s"><use href="#ruffled-petal" /></g>
+                  <g class="carnation-petal" style="--angle:-40deg;--fold:4deg;--size:.64;--delay:.88s"><use href="#ruffled-petal" /></g>
+                </g>
+              </g>
+              <g class="flower-calyx">
+                <path d="M231 195c3 20 12 46 28 53 19-12 25-34 30-55l-12 12-1-18-11 14-6-18-7 19-10-14 1 20Z" fill="url(#calyx-green)" />
+                <path d="m247 211 12 31 13-34m-13 34v-37" fill="none" stroke="#b6c49a" stroke-width="1.2" opacity=".6" />
+              </g>
+            </svg>
+            <span class="flower-note" aria-hidden="true">
+              <span class="preview-heart">♡</span><span class="preview-heading">Para <span data-recipient>Jenny</span></span><span class="preview-lines"></span>
+            </span>
+            <span class="flower-tag" aria-hidden="true">UN CLAVEL PARA<strong data-recipient>Jenny</strong></span>
+          </button>
+
+          <div class="friend friend-patrick" aria-hidden="true"><svg viewBox="0 0 170 210"><use href="#patrick" /></svg></div>
+          <div class="friend friend-bob" aria-hidden="true"><span class="speech-bubble">¡Estoy listo! ♡</span><svg viewBox="0 0 190 260"><use href="#bob" /></svg></div>
+          <span class="sand-shadow" aria-hidden="true"></span>
+          <span class="scene-footnote" aria-hidden="true">Toca el clavel. Florece solo para ti.</span>
+        </div>
+      </section>
+
+      <div class="bottom-rule"><span></span><svg width="22" height="22" aria-hidden="true"><use href="#sparkle" /></svg><span></span></div>
+      <footer class="site-footer"><span>Un pequeño detalle. Un cariño inmenso.</span><span>De Fondo de Bikini a tu corazón <span class="footer-heart">♡</span></span></footer>
+      <p class="sr-only" id="opening-status" role="status"></p>
+      <noscript><p class="noscript-note">Activa JavaScript para abrir la sorpresa. También puedes leer el texto de la carta en el archivo <code>carta.js</code>.</p></noscript>
+    </main>
+
+    <dialog class="letter-dialog" id="letter-dialog" aria-labelledby="letter-title">
+      <button class="close-letter" type="button" id="close-letter" aria-label="Cerrar la carta">×</button>
+      <article class="letter-paper">
+        <div class="letter-topline"><svg width="28" height="28" aria-hidden="true"><use href="#shell" /></svg><span>PARA GUARDAR CERQUITA DEL CORAZÓN</span><span aria-hidden="true">♡</span></div>
+        <div class="letter-heading">
+          <div><p class="eyebrow">ESTA CARTA TIENE UN SOLO DESTINO</p><h2 id="letter-title">Para ti,<br /><em data-recipient>Jenny.</em></h2></div>
+          <svg class="letter-flower" viewBox="0 0 160 260" role="img" aria-label="Un clavel rosado, tu flor favorita"><use href="#carnation" /></svg>
+        </div>
+        <div class="letter-content">
+          <p class="letter-greeting" id="letter-greeting"></p>
+          <div id="letter-paragraphs"></div>
+          <figure class="letter-meme">
+            <p class="meme-heading">Posible solución al problema de la distancia:</p>
+            <img src="assets/bob-esponja-esposas.jpg" width="1200" height="674" alt="Bob Esponja con unas esposas enormes alrededor de sus brazos." loading="lazy" decoding="async" />
+            <figcaption>Bueno… mejor unos tiquetes de avión y un abrazo larguísimo. ♡</figcaption>
+          </figure>
+          <div class="letter-signoff"><p id="letter-farewell"></p><p id="letter-signature"></p></div>
+        </div>
+        <div class="letter-bottom"><span>Incluso en un océano de personas,<br /><em>qué bonito coincidir contigo.</em></span><svg viewBox="0 0 190 260" width="58" height="79" aria-hidden="true"><use href="#bob" /></svg></div>
+      </article>
+      <button class="replay-button" type="button" id="replay-button">Volver a hacer florecer el clavel <span aria-hidden="true">↻</span></button>
+    </dialog>
+  </body>
+</html>
